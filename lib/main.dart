@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_hub/modules/auth/login/login_screen.dart';
+import 'package:rick_hub/modules/auth/login/repositories/local_login_repository.dart';
+import 'package:rick_hub/modules/home/characters_screen.dart';
+import 'package:rick_hub/modules/home/services/character_repository.dart';
+import 'package:rick_hub/modules/pin_code/pin_code_screen.dart';
+import 'package:rick_hub/modules/pin_code/repositories/pin_code_repository.dart';
+import 'package:rick_hub/route/route_constants.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      debugShowCheckedModeBanner: false,
+      routes: {
+        RouteConstants.loginRoute: (context) => PinCodeScreen(),
+        RouteConstants.pinCodeRoute: (context) => PinCodeScreen(),
+        // RouteConstants.charactersRoute: (context) => CharactersScreen(),
+      },
+      home: RepositoryProvider(
+        create: (context) => CharactersRepository(),
+          child: CharactersScreen(),
       ),
-      home: Container();
     );
   }
 }
