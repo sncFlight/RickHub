@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.3
   uuid: ^3.0.0
+  infinite_scroll_pagination:
   flutter_svg:
   google_fonts:
   refresh_loadmore :

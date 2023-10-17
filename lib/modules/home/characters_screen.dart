@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:refresh_loadmore/refresh_loadmore.dart';
 import 'package:rick_hub/constants/image_paths.dart';
 import 'package:rick_hub/constants/palette.dart';
 import 'package:rick_hub/modules/home/bloc/character_bloc.dart';
@@ -11,10 +10,11 @@ import 'package:rick_hub/modules/home/bloc/character_state.dart';
 import 'package:rick_hub/modules/home/models/character.dart';
 import 'package:rick_hub/modules/home/services/character_repository.dart';
 import 'package:rick_hub/widgets/character_widget.dart';
+import 'package:rick_hub/widgets/custom_app_bar.dart';
 import 'package:rick_hub/widgets/search_input.dart';
 
 class CharactersScreen extends StatelessWidget {
-  // final RefreshController _refreshController = RefreshController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,6 @@ class CharactersScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildAppBar(),
-        bottomNavigationBar: Container(height: 100,),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -42,31 +41,16 @@ class CharactersScreen extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Palette.appBarGreen,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(18)),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.arrow_back_ios),
-              ),
-              Text('Characters'),
-            ],
-          ),
-          Container(
+    return CustomAppBar(
+      title: 'Characters',
+      widget: Container(
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white
-              )
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: Colors.white
+                )
             ),
             child: SvgPicture.asset(
               ImagePaths.user,
@@ -74,10 +58,6 @@ class CharactersScreen extends StatelessWidget {
               height: 24,
             ),
           ),
-        ],
-      ),
-      // automaticallyImplyLeading: true,
-      centerTitle: true,
     );
   }
 
@@ -173,24 +153,35 @@ class CharactersScreen extends StatelessWidget {
   Widget _buildCharacters() {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
-        // if (state.formStatus == CharactersStatus.loading) {
-        //   return SizedBox.shrink();
-        // }
+        if (state.formStatus == CharactersStatus.loading) {
+          return SizedBox.shrink();
+        }
 
-        return RefreshLoadmore(
-          onRefresh: () => onPulledToRefresh(context),
-          onLoadmore: () => onLoadedMore(context),
+        return NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollEndNotification &&
+                notification.metrics.extentAfter == 0) {
 
-          isLastPage: false,
-          child: ListView.builder(
-            itemCount: state.loadedCharacters.length,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 20,),
-                child: _buildItem(state.loadedCharacters[index]),
-              );
-            },
+              onLoadedMore(context);
+            }
+            return false;
+          },
+          child: RefreshIndicator(
+            onRefresh: () => onPulledToRefresh(context),
+            child: ListView.builder(
+              itemCount: state.loadedCharacters.length + 1,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == state.loadedCharacters.length) {
+                  return CircularProgressIndicator();
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.only(top: 20,),
+                  child: _buildItem(state.loadedCharacters[index]),
+                );
+              },
+            ),
           ),
         );
       },
@@ -199,12 +190,10 @@ class CharactersScreen extends StatelessWidget {
 
   Future<void> onLoadedMore(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersLoadedMoreEvent());
-
   }
 
   Future<void> onPulledToRefresh(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersPulledToRefreshEvent());
-
   }
 
   Widget _buildItem(Character character) {

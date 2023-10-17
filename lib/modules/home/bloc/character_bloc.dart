@@ -35,6 +35,7 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   Future<void> _onCharactersLoadedMoreEvent(CharactersLoadedMoreEvent event, Emitter emit) async {
     emit(
       state.copyWith(
+        loadedCharacters: state.loadedCharacters,
         formStatus: CharactersStatus.loading,
         filter: Filter(
           page: state.filter.page + 1,
@@ -68,11 +69,12 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
     required Emitter emit
   }) async {
     try {
-      final List<Character> LoadedCharactersList = await charactersRepository!.getAllCharacters(state.filter);
+      final List<Character> loadedCharactersList = await charactersRepository!.getAllCharacters(state.filter);
+      state.loadedCharacters.addAll(loadedCharactersList);
 
       emit(
         state.copyWith(
-          loadedCharacters: LoadedCharactersList,
+          loadedCharacters: state.loadedCharacters,
           formStatus: CharactersStatus.loaded,
           filter: Filter(
             page: state.filter.page,

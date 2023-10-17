@@ -1,67 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rick_hub/constants/image_paths.dart';
+import 'package:rick_hub/constants/palette.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_bloc.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_state.dart';
 import 'package:rick_hub/modules/pin_code/repositories/pin_code_repository.dart';
+import 'package:rick_hub/widgets/custom_app_bar.dart';
 
 class PinCodeScreen extends StatelessWidget {
   final String enteredPin = '';
-
-  Widget numButton(int number) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: TextButton(
-        onPressed: () {},
-        child: Text(
-          number.toString(),
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(_) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: _buildAppBar(),
       body: BlocProvider(
         create: (context) => PinCodeBloc(
-          repository: context.read<PinCodeRepository>(),
+          repository: PinCodeRepository(),
         ),
-        child: _buildForm(),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildShapes(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 200),
+                child: _buildNumPud(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildForm() {
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: _buildInfoText(),
-          ),
-          _buildShapes(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 200),
-            child: _buildNumPud(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoText() {
-    return Text(
-      'Enter Your Pin',
-      style: TextStyle(
-        fontSize: 32,
-        color: Colors.black,
-        fontWeight: FontWeight.w600,
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      title: 'Enter PIN-code',
+      widget: SvgPicture.asset(
+        ImagePaths.heart,
+        width: 24,
+        height: 24,
       ),
     );
   }
@@ -69,16 +49,13 @@ class PinCodeScreen extends StatelessWidget {
   Widget _buildShapes() {
     return BlocBuilder<PinCodeBloc, PinCodeState>(
       builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (int i = 0; i < 4; i++)
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: _buildShape((i < state.pinCode.length) ? Colors.orange : Colors.green),
-              ),
-          ]
-        );
+        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          for (int i = 0; i < 4; i++)
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: _buildShape((i < state.pinCode.length) ? Colors.orange : Colors.green),
+            ),
+        ]);
       },
     );
   }
@@ -102,15 +79,14 @@ class PinCodeScreen extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                  for (int j = 1; j < 4; j++)
-                    numButton(3 * i + j),
+                    for (int j = 1; j < 4; j++) _buildNumButton(3 * i + j),
                   ],
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const TextButton(onPressed: null, child: SizedBox()),
-                    numButton(0),
+                    _buildNumButton(0),
                     TextButton(
                       onPressed: () {},
                       child: const Icon(
@@ -118,11 +94,28 @@ class PinCodeScreen extends StatelessWidget {
                         color: Colors.black,
                         size: 24,
                       ),
-                   ),
+                    ),
                   ],
                 ),
-            ),
+          ),
       ],
+    );
+  }
+
+  Widget _buildNumButton(int number) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TextButton(
+        onPressed: () {},
+        child: Text(
+          number.toString(),
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ),
     );
   }
 }

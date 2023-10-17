@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:rick_hub/modules/home/filter.dart';
 import 'package:dio/dio.dart';
 import 'package:rick_hub/modules/home/models/character.dart';

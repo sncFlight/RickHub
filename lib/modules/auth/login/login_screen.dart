@@ -5,7 +5,7 @@ import 'package:rick_hub/modules/auth/login/bloc/login_block.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_event.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_state.dart';
 import 'package:rick_hub/modules/auth/login/repositories/local_login_repository.dart';
-import 'package:rick_hub/route/route_constants.dart';
+import 'package:rick_hub/constants/route_constants.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
