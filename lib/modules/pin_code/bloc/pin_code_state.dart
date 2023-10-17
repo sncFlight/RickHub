@@ -1,22 +1,43 @@
-import 'package:rick_hub/enums.dart';
-
 class PinCodeState {
   final String pinCode;
-  final PinCodeFormStatus formStatus;
-  
+  final PinCodeStatus status;
+
   PinCodeState({
     this.pinCode = '',
-    this.formStatus = PinCodeFormStatus.initial,
+    this.status = PinCodeStatus.initial,
   });
 
   PinCodeState copyWith({
     String? pinCode,
-    PinCodeFormStatus? formStatus,
+    PinCodeStatus? status,
   }) {
     return PinCodeState(
       pinCode: pinCode ?? this.pinCode,
-      formStatus: formStatus ?? this.formStatus,
+      status: status ?? this.status,
     );
   }
-
 }
+
+enum PinCodeStatus {
+  initial,
+  writing,
+  successEnter,
+  saved,
+  mismatch
+}
+
+// class PinCodeInitialState extends PinCodeState {}
+//
+// class PinCodeWritingState extends PinCodeState {
+//   final int count;
+//
+//   PinCodeWritingState({
+//     required this.count,
+//   });
+// }
+//
+// class PinCodeSavedState extends PinCodeState {}
+//
+// class PinCodeNotSavedState extends PinCodeState {}
+//
+// class PinCodeMismatchState extends PinCodeState {}

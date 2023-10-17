@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rick_hub/constants/image_paths.dart';
 import 'package:rick_hub/constants/palette.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back_ios),
               ),
               Text('Enter PIN-code'),

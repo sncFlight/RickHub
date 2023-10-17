@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_hub/modules/home/bloc/character_event.dart';
-import 'package:rick_hub/modules/home/bloc/character_state.dart';
-import 'package:rick_hub/modules/home/filter.dart';
-import 'package:rick_hub/modules/home/models/character.dart';
-import 'package:rick_hub/modules/home/services/character_repository.dart';
+import 'package:rick_hub/modules/characters/bloc/character_event.dart';
+import 'package:rick_hub/modules/characters/bloc/character_state.dart';
+import 'package:rick_hub/modules/characters/filter.dart';
+import 'package:rick_hub/modules/characters/models/character.dart';
+import 'package:rick_hub/modules/characters/services/character_repository.dart';
 
 class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   final CharactersRepository? charactersRepository;

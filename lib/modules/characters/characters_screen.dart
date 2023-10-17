@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rick_hub/constants/image_paths.dart';
-import 'package:rick_hub/constants/palette.dart';
-import 'package:rick_hub/modules/home/bloc/character_bloc.dart';
-import 'package:rick_hub/modules/home/bloc/character_event.dart';
-import 'package:rick_hub/modules/home/bloc/character_state.dart';
-import 'package:rick_hub/modules/home/models/character.dart';
-import 'package:rick_hub/modules/home/services/character_repository.dart';
+import 'package:rick_hub/modules/characters/bloc/character_bloc.dart';
+import 'package:rick_hub/modules/characters/bloc/character_event.dart';
+import 'package:rick_hub/modules/characters/bloc/character_state.dart';
+import 'package:rick_hub/modules/characters/models/character.dart';
+import 'package:rick_hub/modules/characters/services/character_repository.dart';
 import 'package:rick_hub/widgets/character_widget.dart';
 import 'package:rick_hub/widgets/custom_app_bar.dart';
 import 'package:rick_hub/widgets/search_input.dart';
@@ -19,7 +18,7 @@ class CharactersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CharactersBloc>(
-      create: (context) => CharactersBloc(charactersRepository: context.read<CharactersRepository>()),
+      create: (context) => CharactersBloc(charactersRepository: CharactersRepository()),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildAppBar(),
@@ -153,7 +152,10 @@ class CharactersScreen extends StatelessWidget {
   Widget _buildCharacters() {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
-        if (state.formStatus == CharactersStatus.loading) {
+        if (
+          state.formStatus == CharactersStatus.loading
+          && state.loadedCharacters.isEmpty
+        ) {
           return SizedBox.shrink();
         }
 

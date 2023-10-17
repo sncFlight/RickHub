@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rick_hub/constants/image_paths.dart';
-import 'package:rick_hub/modules/home/models/character.dart';
+import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/widgets/location_widget.dart';
 
 class CharacterWidget extends StatelessWidget {

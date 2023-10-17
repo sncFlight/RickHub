@@ -1,4 +1,4 @@
-import 'package:rick_hub/modules/home/filter.dart';
+import 'package:rick_hub/modules/characters/filter.dart';
 
 class CharactersState {
   final List<dynamic> loadedCharacters;

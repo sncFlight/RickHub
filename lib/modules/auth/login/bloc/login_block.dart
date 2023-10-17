@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:rick_hub/enums.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_event.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_state.dart';
 import 'package:rick_hub/modules/auth/login/repositories/local_login_repository.dart';

@@ -1,5 +1,3 @@
-import 'package:rick_hub/enums.dart';
-
 class LoginState {
   final String username;
   final String password;
@@ -22,4 +20,11 @@ class LoginState {
       formStatus: formStatus ?? this.formStatus,
     );
   }
+}
+
+enum LoginFormStatus {
+  initial,
+  loading,
+  error,
+  authorized,
 }

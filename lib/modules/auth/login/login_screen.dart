@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_hub/enums.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_block.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_event.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_state.dart';
@@ -37,8 +36,8 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _usernameField(),
-                _passwordField(),
-                _loginButton(),
+                _buildPasswordField(),
+                _buildLoginButton(),
               ],
             ),
           )
@@ -60,10 +59,11 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _passwordField() {
+  Widget _buildPasswordField() {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
+          obscureText: true,
           decoration: InputDecoration(
               icon: Icon(Icons.security),
               hintText: 'Password'
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginButton() {
+  Widget _buildLoginButton() {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         final LoginFormStatus formStatus = state.formStatus;
@@ -89,7 +89,7 @@ class LoginScreen extends StatelessWidget {
               ? CircularProgressIndicator()
               : ElevatedButton(
             onPressed: () => context.read<LoginBloc>().add(LoginSubmittedEvent()),
-            child: Text("ВАЙТИ"),
+            child: Text("Логин"),
           );
         },
       ),
