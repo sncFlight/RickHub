@@ -1,4 +1,4 @@
-import 'package:rick_hub/modules/characters/filter.dart';
+import 'package:rick_hub/modules/characters/filters/filter.dart';
 import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/modules/characters/services/character_provider.dart';
 

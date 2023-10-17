@@ -7,3 +7,6 @@ class PinCodeChangedEvent extends PinCodeEvent {
     required this.pinCode,
   });
 }
+
+class RouteChangedEvent extends PinCodeEvent {
+}

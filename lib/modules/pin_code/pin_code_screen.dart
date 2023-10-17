@@ -123,14 +123,14 @@ class PinCodeScreen extends StatelessWidget {
   }
 
   Widget _buildNumButton(int number) {
-    return BlocListener<PinCodeBloc, PinCodeState>(
-      listener: (context, state) {
-        if (state.status == PinCodeStatus.successEnter) {
-          Navigator.pushNamedAndRemoveUntil(context, RouteConstants.charactersRoute, (r) => false);
-        }
-      },
-      child: BlocBuilder<PinCodeBloc, PinCodeState>(
-          builder: (context, state) {
+    return BlocBuilder<PinCodeBloc, PinCodeState>(
+        builder: (context, state) {
+          if (state.status == PinCodeStatus.successEnter) {
+            context.read<PinCodeBloc>().add(RouteChangedEvent());
+
+            Navigator.pushNamed(context, RouteConstants.charactersRoute);
+          }
+
           return Padding(
             padding: const EdgeInsets.only(top: 16),
             child: TextButton(
@@ -147,8 +147,7 @@ class PinCodeScreen extends StatelessWidget {
               ),
             ),
           );
-        }
-      ),
+      }
     );
   }
 }

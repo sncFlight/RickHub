@@ -11,8 +11,12 @@ class PinCodeBloc extends Bloc<PinCodeEvent, PinCodeState> {
     this.repository,
   }) : super(PinCodeState()) {
     on<PinCodeChangedEvent>(_onPinCodeChanged);
+    on<RouteChangedEvent>(_onRouteChanged);
   }
 
+  Future<void> _onRouteChanged(RouteChangedEvent event, Emitter<PinCodeState> emit) async {
+    emit(state.copyWith(pinCode: '', status: PinCodeStatus.initial));
+  }
 
   Future<void> _onPinCodeChanged(PinCodeChangedEvent event, Emitter<PinCodeState> emit) async {
     bool isSaved = await isPinCodeSaved();

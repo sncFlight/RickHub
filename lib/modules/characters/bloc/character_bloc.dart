@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
 import 'package:rick_hub/modules/characters/bloc/character_state.dart';
-import 'package:rick_hub/modules/characters/filter.dart';
+import 'package:rick_hub/modules/characters/filters/filter.dart';
 import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/modules/characters/services/character_repository.dart';
 
