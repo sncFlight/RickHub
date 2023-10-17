@@ -1,18 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:rick_hub/constants/Palette.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:refresh_loadmore/refresh_loadmore.dart';
+import 'package:rick_hub/constants/image_paths.dart';
+import 'package:rick_hub/constants/palette.dart';
 import 'package:rick_hub/modules/home/bloc/character_bloc.dart';
 import 'package:rick_hub/modules/home/bloc/character_event.dart';
 import 'package:rick_hub/modules/home/bloc/character_state.dart';
 import 'package:rick_hub/modules/home/models/character.dart';
 import 'package:rick_hub/modules/home/services/character_repository.dart';
-import 'package:rick_hub/widgets/item_widget.dart';
+import 'package:rick_hub/widgets/character_widget.dart';
 import 'package:rick_hub/widgets/search_input.dart';
 
 class CharactersScreen extends StatelessWidget {
-  final CharactersRepository charactersRepository = CharactersRepository();
+  // final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +23,19 @@ class CharactersScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildAppBar(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSearch(),
-            _buildLogo(),
-            Expanded(
-              child: _buildCharacters(),
-            )
-          ],
+        bottomNavigationBar: Container(height: 100,),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildSearch(),
+              _buildLogo(),
+              Expanded(
+                child: _buildCharacters(),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -53,7 +59,21 @@ class CharactersScreen extends StatelessWidget {
               Text('Characters'),
             ],
           ),
-          Icon(Icons.account),
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white
+              )
+            ),
+            child: SvgPicture.asset(
+              ImagePaths.user,
+              width: 24,
+              height: 24,
+            ),
+          ),
         ],
       ),
       // automaticallyImplyLeading: true,
@@ -62,82 +82,112 @@ class CharactersScreen extends StatelessWidget {
   }
 
   Widget _buildSearch() {
-    return BlocBuilder<CharactersBloc, CharactersState>(
-      builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 30,
-          ),
-          child: SearchInput(
+    return Padding(
+      padding: const EdgeInsets.only(top: 7),
+      child: BlocBuilder<CharactersBloc, CharactersState>(
+        builder: (context, state) {
+          return SearchInput(
             onChanged: (value) => context.read<CharactersBloc>().add(CharactersSearchChangedEvent(searchString: value)),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
   Widget _buildLogo() {
-    final String logoText = ('rick hub').toUpperCase();
-
-    return Column(
-      children: [
-        Container(
-          height: 45,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: ShapeDecoration(
-            color: Palette.brushGreen,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: Palette.borderGreen),
-              borderRadius: BorderRadius.circular(36),
-            ),
-            shadows: [
-              BoxShadow(
-                color: Color(0xA56E980B),
-                blurRadius: 19,
-                offset: Offset(0, 5),
-                spreadRadius: 0,
-              )
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 12,
+        right: 12,
+        top: 19,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SvgPicture.asset(
+            ImagePaths.littleStar,
+            width: 16,
+            height: 16,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                logoText,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 31,
-                  fontFamily: 'Rubik Bubbles',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: -0.27,
-                ),
+          SvgPicture.asset(
+            ImagePaths.bigStar,
+            width: 24,
+            height: 24,
+          ),
+          Container(
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: ShapeDecoration(
+              color: Color(0xFF298E3E),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1, color: Color(0xFF79A611)),
+                borderRadius: BorderRadius.circular(36),
               ),
-            ],
+              shadows: [
+                BoxShadow(
+                  color: Color(0xA56E980B),
+                  blurRadius: 19,
+                  offset: Offset(0, 5),
+                  spreadRadius: 0,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'RICK HUB',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.rubikBubbles(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 31,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                      letterSpacing: -0.27,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          SvgPicture.asset(
+            ImagePaths.bigStar,
+            width: 24,
+            height: 24,
+          ),
+          SvgPicture.asset(
+            ImagePaths.littleStar,
+            width: 16,
+            height: 16,
+          ),
+        ],
+      ),
     );
   }
+
 
   Widget _buildCharacters() {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
-        return SmartRefresher(
-          controller: RefreshController(initialRefresh: true),
-          onRefresh: () => context.read<CharactersBloc>().add(CharactersPulledToRefreshEvent()),
-          enablePullUp: true,
+        // if (state.formStatus == CharactersStatus.loading) {
+        //   return SizedBox.shrink();
+        // }
+
+        return RefreshLoadmore(
+          onRefresh: () => onPulledToRefresh(context),
+          onLoadmore: () => onLoadedMore(context),
+
+          isLastPage: false,
           child: ListView.builder(
             itemCount: state.loadedCharacters.length,
             padding: EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20,),
                 child: _buildItem(state.loadedCharacters[index]),
               );
             },
@@ -145,6 +195,16 @@ class CharactersScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> onLoadedMore(BuildContext context) async {
+    context.read<CharactersBloc>().add(CharactersLoadedMoreEvent());
+
+  }
+
+  Future<void> onPulledToRefresh(BuildContext context) async {
+    context.read<CharactersBloc>().add(CharactersPulledToRefreshEvent());
+
   }
 
   Widget _buildItem(Character character) {

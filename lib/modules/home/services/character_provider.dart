@@ -1,44 +1,27 @@
-import 'package:rick_hub/modules/home/models/character.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:rick_hub/modules/home/filter.dart';
 import 'package:dio/dio.dart';
-import 'package:rick_hub/modules/home/models/info.dart';
+import 'package:rick_hub/modules/home/models/character.dart';
 
-class CharactersProvider extends GetEntitiesService {
-  final String baseUrl = "https://rickandmortyapi.com/api/";
-  final String characterEndpoint = "character";
 
-  Future<List<Character>> getAllCharacters() async {
-    List<Map<String, dynamic>> objects = await super.getAllEntities('${this.baseUrl}${this.characterEndpoint}');
-
-    return List<Character>.from(objects.map((x) => Character.fromJson(x)));
-  }
-}
-
-abstract class GetEntitiesService {
+class CharactersProvider {
   static final Dio _dio = Dio();
 
-  Future<List<Map<String, dynamic>>> getAllEntities(String url) async {
-    try {
-      List<Map<String, dynamic>> allEntities = [];
-      String? nextUrl = url;
-      while (nextUrl != null) {
-        var response = await _dio.get(nextUrl);
-        try {
-          var dataInfo = response.data["info"];
-          // So, we have info object and pagination
-          Info info = Info.fromJson(response.data["info"]);
-          nextUrl = info.next;
-          allEntities.addAll(
-              List<Map<String, dynamic>>.from(response.data["results"]));
-        } catch (e) {
-          // We don't have info object and pagination
-          allEntities.addAll(List<Map<String, dynamic>>.from(response.data));
-          nextUrl = null;
-        }
-      }
+  Future<List<Character>> getAll(Filter filter) async {
+    final String url = 'https://rickandmortyapi.com/api/character/?name=${filter.name}&page=${filter.page}';
 
-      return allEntities;
-    } on DioError {
-      rethrow;
+    try {
+      List<Map<String, dynamic>> rawCharacters = [];
+
+      final Response response = await _dio.get(url);
+
+      rawCharacters.addAll(List<Map<String, dynamic>>.from(response.data["results"]));
+
+      final List<Character> characters = List<Character>.from(rawCharacters.map((x) => Character.fromJson(x)));
+
+      return characters;
+    } catch (e) {
+      throw e;
     }
   }
 }

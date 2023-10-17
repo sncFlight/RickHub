@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rick_hub/constants/Palette.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rick_hub/constants/image_paths.dart';
+import 'package:rick_hub/constants/palette.dart';
 
 class SearchInput extends StatelessWidget {
   final Function(String) onChanged;
@@ -8,28 +10,27 @@ class SearchInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return SearchBar(
       onChanged: (value) => onChanged(value),
-      decoration: InputDecoration(
-        enabled: true,
-        enabledBorder: OutlineInputBorder(
+      leading: SvgPicture.asset(ImagePaths.search),
+      padding: MaterialStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 15),
+      ),
+
+      hintText: 'Wabba Labba Dub Dub',
+      hintStyle: MaterialStatePropertyAll(TextStyle(
+          color: Colors.grey,
+          fontSize: 18
+        ),
+      ),
+      shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(47),
-          borderSide: BorderSide(
-            color: Palette.searchDecorationGreen,
+          side: BorderSide(
+              color: Palette.searchDecorationGreen,
+              width: 2
           ),
         ),
-        hintText: 'Wabba Labba Dub Dub',
-        hintStyle: TextStyle(
-            color: Colors.grey,
-            fontSize: 18
-        ),
-        prefixIcon: Container(
-          padding: EdgeInsets.all(15),
-          child: Icon(
-            Icons.search,
-          ),
-          width: 18,
-        )
       ),
     );
   }

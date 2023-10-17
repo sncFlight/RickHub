@@ -2,33 +2,13 @@
 class Assets {
   Assets._();
 
-  static const String blocCharacterBlock = 'lib/modules/home/bloc/character_bloc.dart';
-  static const String blocCharacterEvent = 'lib/modules/home/bloc/character_event.dart';
-  static const String blocCharacterState = 'lib/modules/home/bloc/character_state.dart';
-  static const String blocLoginBlock = 'lib/modules/auth/login/bloc/login_block.dart';
-  static const String blocLoginEvent = 'lib/modules/auth/login/bloc/login_event.dart';
-  static const String blocLoginState = 'lib/modules/auth/login/bloc/login_state.dart';
-  static const String blocPinCodeBloc = 'lib/modules/pin_code/bloc/pin_code_bloc.dart';
-  static const String blocPinCodeEvent = 'lib/modules/pin_code/bloc/pin_code_event.dart';
-  static const String blocPinCodeState = 'lib/modules/pin_code/bloc/pin_code_state.dart';
-  static const String constantsPalette = 'lib/constants/Palette.dart';
-  static const String generatedAssets = 'lib/generated/assets.dart';
-  static const String homeHomeScreen = 'lib/modules/home/characters_screen.dart';
-  static const String libEnums = 'lib/enums.dart';
-  static const String libMain = 'lib/main.dart';
-  static const String loginLoginScreen = 'lib/modules/auth/login/login_screen.dart';
-  static const String modelsCharacter = 'lib/modules/home/models/character.dart';
-  static const String modelsInfo = 'lib/modules/home/models/info.dart';
-  static const String modelsLocation = 'lib/modules/home/models/location.dart';
-  static const String pinCodePinCodeScreen = 'lib/modules/pin_code/pin_code_screen.dart';
-  static const String repositoriesAuthRepository = 'lib/modules/auth/login/repositories/auth_repository.dart';
-  static const String repositoriesLocalLoginRepository = 'lib/modules/auth/login/repositories/local_login_repository.dart';
-  static const String repositoriesPinCodeRepository = 'lib/modules/pin_code/repositories/pin_code_repository.dart';
-  static const String routeRouteConstants = 'lib/route/route_constants.dart';
-  static const String servicesCharacterProvider = 'lib/modules/home/services/character_provider.dart';
-  static const String servicesCharacterRepository = 'lib/modules/home/services/character_repository.dart';
-  static const String widgetsItemWidget = 'lib/widgets/item_widget.dart';
-  static const String widgetsLocationWidget = 'lib/widgets/location_widget.dart';
-  static const String widgetsSearchInput = 'lib/widgets/search_input.dart';
+  static const String imagesArrow = 'assets/images/arrow.svg';
+  static const String imagesBigStar = 'assets/images/big_star.svg';
+  static const String imagesHeart = 'assets/images/heart.svg';
+  static const String imagesLittleStar = 'assets/images/little_star.svg';
+  static const String imagesLocation = 'assets/images/location.svg';
+  static const String imagesLogo = 'assets/images/logo.svg';
+  static const String imagesSearch = 'assets/images/search.svg';
+  static const String imagesUser = 'assets/images/user.svg';
 
 }
