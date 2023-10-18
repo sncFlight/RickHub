@@ -7,13 +7,11 @@ class CharactersProvider {
   static final Dio _dio = Dio();
 
   Future<List<Character>> getAll(Filter filter) async {
-    final String url = 'https://rickandmortyapi.com/api/character?name=${filter.name}&page=${filter.page}';
-
     try {
-      List<Map<String, dynamic>> rawCharacters = [];
-
+      final String url = 'https://rickandmortyapi.com/api/character?name=${filter.name}&page=${filter.page}';
       final Response response = await _dio.get(url);
 
+      List<Map<String, dynamic>> rawCharacters = [];
       rawCharacters.addAll(List<Map<String, dynamic>>.from(response.data["results"]));
 
       final List<Character> characters = List<Character>.from(rawCharacters.map((x) => Character.fromJson(x)));

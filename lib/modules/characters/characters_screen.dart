@@ -9,12 +9,11 @@ import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/modules/characters/services/character_repository.dart';
 import 'package:rick_hub/widgets/character_widget.dart';
 import 'package:rick_hub/widgets/custom_app_bar.dart';
+import 'package:rick_hub/widgets/custom_progress_indicator.dart';
 import 'package:rick_hub/widgets/logo_widget.dart';
 import 'package:rick_hub/widgets/search_input.dart';
 
 class CharactersScreen extends StatelessWidget {
-  final ScrollController scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CharactersBloc>(
@@ -46,10 +45,10 @@ class CharactersScreen extends StatelessWidget {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-                color: Colors.white
-            )
+          shape: BoxShape.circle,
+          border: Border.all(
+              color: Colors.white
+          )
         ),
         child: SvgPicture.asset(
           ImagePaths.user,
@@ -115,32 +114,37 @@ class CharactersScreen extends StatelessWidget {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
         if (
-          state.formStatus == CharactersStatus.loading
+          state.formStatus == CharactersStatus.empty
           && state.loadedCharacters.isEmpty
         ) {
+          callRefresh(context);
+          
           return SizedBox.shrink();
         }
 
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            if (notification is ScrollEndNotification &&
-                notification.metrics.extentAfter == 0) {
-
-              onLoadedMore(context);
+            if (
+              notification is ScrollEndNotification
+              && notification.metrics.extentAfter == 0
+            ) {
+              callLoadMore(context);
             }
+
             return false;
           },
           child: RefreshIndicator(
-            onRefresh: () => onPulledToRefresh(context),
+            onRefresh: () => callRefresh(context),
             child: ListView.builder(
               itemCount: state.loadedCharacters.length + 1,
               padding: EdgeInsets.symmetric(horizontal: 16),
               itemBuilder: (BuildContext context, int index) {
-                if (
-                  index == state.loadedCharacters.length
-                ) {
+                if (index == state.loadedCharacters.length) {
                   if (state.loadedCharacters.length != 0) {
-                    return CircularProgressIndicator();
+                    return Container(
+                      width: 30,
+                      child: CustomProgressIndicator(),
+                    );
                   } else {
                     return SizedBox.shrink();
                   }
@@ -158,11 +162,11 @@ class CharactersScreen extends StatelessWidget {
     );
   }
 
-  Future<void> onLoadedMore(BuildContext context) async {
+  Future<void> callLoadMore(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersLoadedMoreEvent());
   }
 
-  Future<void> onPulledToRefresh(BuildContext context) async {
+  Future<void> callRefresh(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersPulledToRefreshEvent());
   }
 

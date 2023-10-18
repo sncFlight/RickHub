@@ -7,7 +7,7 @@ class Character {
   final String locationName;
   final String imageUrl;
   final String url;
-  final DateTime created;
+  final String species;
 
   Character({
     required this.id,
@@ -18,53 +18,20 @@ class Character {
     required this.locationName,
     required this.imageUrl,
     required this.url,
-    required this.created,
+    required this.species,
   });
 
-  factory Character.fromJson(Map<String, dynamic> json) =>
-      Character(
-        id: json["id"],
-        name: json["name"],
-        status: json["status"],
-        gender: json["gender"],
-        originName: json["origin"]["name"],
-        locationName: json["location"]["name"],
-        imageUrl: json["image"],
-        url: json["url"],
-        created: DateTime.parse(json["created"]),
-      );
+  factory Character.fromJson(Map<String, dynamic> json) {
+    return Character(
+      id: json["id"],
+      name: json["name"],
+      status: json["status"],
+      gender: json["gender"],
+      originName: json["origin"]["name"],
+      locationName: json["location"]["name"],
+      imageUrl: json["image"],
+      url: json["url"],
+      species: json["species"],
+    );
+  }
 }
-
-//   Map<String, dynamic> toJson() => {
-//     "id": id,
-//     "name": name,
-//     "status": status,
-//     "gender": gender,
-//     "origin": origin,
-//     "location": location,
-//     "image": image,
-//     "url": url,
-//     "created": created.toIso8601String(),
-//   };
-// }
-
-// class CharacterLocation {
-//   CharacterLocation({
-//     required this.name,
-//     required this.url,
-//   });
-//
-//   String name;
-//   String url;
-//
-//   factory CharacterLocation.fromJson(Map<String, dynamic> json) =>
-//     CharacterLocation(
-//       name: json["name"],
-//       url: json["url"],
-//     );
-//
-//   Map<String, dynamic> toJson() => {
-//     "name": name,
-//     "url": url,
-//   };
-// }

@@ -1,5 +1,4 @@
 class ImagePaths {
-  
   // icon block
   static String heart = 'assets/icons/heart.svg';
   static String user = 'assets/icons/user.svg';
@@ -13,4 +12,5 @@ class ImagePaths {
   // image block
   static String portal = 'assets/images/portal.png';
   static String loginBackground = 'assets/images/ricks.png';
+  static String rickBelch = 'assets/images/rick_belch.png';
 }

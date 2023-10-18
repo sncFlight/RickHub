@@ -94,6 +94,8 @@ class PinCodeScreen extends StatelessWidget {
         listener: (context, state) {
           if (state.status == PinCodeStatus.successEnter) {
             Navigator.pushNamed(context, RouteConstants.charactersRoute);
+          } else if (state.status == PinCodeStatus.backToLogin) {
+            Navigator.popAndPushNamed(context, RouteConstants.loginRoute);
           }
         },
         child: BlocBuilder<PinCodeBloc, PinCodeState>(
@@ -106,37 +108,37 @@ class PinCodeScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: i < 3
                       ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            for (int j = 1; j < 4; j++)
-                              _buildNumButton(
-                                number: ((3 * i) + j),
-                                context: context,
-                                state: state,
-                              ),
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextButton(onPressed: null, child: SizedBox()),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int j = 1; j < 4; j++)
                             _buildNumButton(
-                              number: 0,
+                              number: ((3 * i) + j),
                               context: context,
                               state: state,
                             ),
-                            TextButton(
-                              onPressed: () => context.read<PinCodeBloc>().add(
-                                  PinCodeChangedEvent(pinCode: state.pinCode.substring(0, state.pinCode.length - 1))),
-                              child: const Icon(
-                                Icons.backspace,
-                                color: Colors.black,
-                                size: 24,
-                              ),
+                        ],
+                      )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextButton(onPressed: null, child: SizedBox()),
+                          _buildNumButton(
+                            number: 0,
+                            context: context,
+                            state: state,
+                          ),
+                          TextButton(
+                            onPressed: () => context.read<PinCodeBloc>().add(
+                                PinCodeChangedEvent(pinCode: state.pinCode.substring(0, state.pinCode.length - 1))),
+                            child: const Icon(
+                              Icons.backspace,
+                              color: Colors.black,
+                              size: 24,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                   ),
               ],
             );
@@ -154,8 +156,7 @@ class PinCodeScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 0),
       child: TextButton(
-        onPressed: () => context.read<PinCodeBloc>().add(
-          PinCodeChangedEvent(pinCode: state.pinCode + number.toString())),
+        onPressed: () => context.read<PinCodeBloc>().add(PinCodeChangedEvent(pinCode: state.pinCode + number.toString())),
         child: Text(
           number.toString(),
           style: const TextStyle(

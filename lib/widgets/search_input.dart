@@ -13,12 +13,10 @@ class SearchInput extends StatelessWidget {
     return SearchBar(
       onChanged: (value) => onChanged(value),
       leading: SvgPicture.asset(ImagePaths.search),
-      padding: MaterialStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 15),
-      ),
-
+      padding: MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 15)),
       hintText: 'Wabba Labba Dub Dub',
-      hintStyle: MaterialStatePropertyAll(TextStyle(
+      hintStyle: MaterialStatePropertyAll(
+        TextStyle(
           color: Colors.grey,
           fontSize: 18
         ),
@@ -27,8 +25,8 @@ class SearchInput extends StatelessWidget {
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(47),
           side: BorderSide(
-              color: Palette.searchDecorationGreen,
-              width: 2
+            color: Palette.searchDecoration,
+            width: 2
           ),
         ),
       ),

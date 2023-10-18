@@ -21,18 +21,27 @@ class PinCodeBloc extends Bloc<PinCodeEvent, PinCodeState> {
   Future<void> _onPinCodeChanged(PinCodeChangedEvent event, Emitter<PinCodeState> emit) async {
     bool isSaved = await isPinCodeSaved();
 
-    if (event.pinCode.length < 4) {
+    if (event.pinCode.length < state.maxPinCodeLength) {
       emit(state.copyWith(pinCode: event.pinCode, status: PinCodeStatus.writing));
 
       return;
     }
 
     if (isSaved) {
-
       if (await validatePinCode(event.pinCode)) {
         emit(state.copyWith(pinCode: event.pinCode, status: PinCodeStatus.successEnter));
       } else {
-        emit(state.copyWith(pinCode: '', status: PinCodeStatus.mismatch));
+        final int errorInputCount = state.currentErrorInputCount + 1;
+        final PinCodeStatus? status;
+
+        if (errorInputCount == state.maxErrorInputCount) {
+          status = PinCodeStatus.backToLogin;
+          clearPinCode();
+        } else {
+          status = PinCodeStatus.mismatch;
+        }
+
+        emit(state.copyWith(pinCode: '', status: status, currentErrorInputCount: errorInputCount));
       }
     } else {
       await savePinCode(event.pinCode);
@@ -50,6 +59,11 @@ class PinCodeBloc extends Bloc<PinCodeEvent, PinCodeState> {
   Future<void> savePinCode(String pinCode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('pin_code', pinCode);
+  }
+
+  Future<void> clearPinCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 
   Future<bool> validatePinCode(String pinCode) async {

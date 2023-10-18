@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:rick_hub/constants/palette.dart';
+import 'package:rick_hub/constants/text_styles.dart';
 
 class LocationWidget extends StatelessWidget {
   final String location;
@@ -10,11 +12,10 @@ class LocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 43,
       height: 18,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: ShapeDecoration(
-        color: Color(0xFFEEEEEE),
+        color: Palette.locationRect,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -25,14 +26,12 @@ class LocationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Earth',
+            location,
             textAlign: TextAlign.right,
-            style: TextStyle(
-              color: Color(0xFF2E3A59),
+            style: TextStyles.rubik(
+              color: Palette.darkBlue,
               fontSize: 12,
-              fontFamily: 'Rubik',
               fontWeight: FontWeight.w400,
-              height: 0,
             ),
           ),
         ],

@@ -9,7 +9,7 @@ class LocalLoginRepository extends AuthRepository{
     required String userName,
     required String password,
   }) async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 3000));
 
     if (
       userName == defaultUserName

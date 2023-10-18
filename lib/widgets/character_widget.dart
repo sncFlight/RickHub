@@ -13,11 +13,12 @@ class CharacterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String fullName = character.name;
-    final String gender = character.gender;
+    final String gender = character.gender.toLowerCase();
     final String status = character.status;
     final String originName = character.originName;
     final String locationName = character.locationName;
     final String imageUrl = character.imageUrl;
+    final String species = character.species;
 
     final Color statusColor;
 
@@ -96,7 +97,7 @@ class CharacterWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    gender,
+                    species + ', ' + gender,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: Colors.grey,

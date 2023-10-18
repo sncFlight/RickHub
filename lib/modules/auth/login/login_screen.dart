@@ -8,6 +8,7 @@ import 'package:rick_hub/modules/auth/login/bloc/login_event.dart';
 import 'package:rick_hub/modules/auth/login/bloc/login_state.dart';
 import 'package:rick_hub/modules/auth/login/repositories/local_login_repository.dart';
 import 'package:rick_hub/constants/route_constants.dart';
+import 'package:rick_hub/widgets/custom_progress_indicator.dart';
 import 'package:rick_hub/widgets/logo_widget.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -31,7 +32,6 @@ class LoginScreen extends StatelessWidget {
             ),
             child: Stack(
               children: [
-
                 BlocListener<LoginBloc, LoginState>(
                   listener: (context, state) {
                     final LoginFormStatus formStatus = state.formStatus;
@@ -85,15 +85,16 @@ Widget _buildLogo() {
 
 Widget _buildFieldsInfoText() {
   return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        'Login',
-        style: TextStyles.rubik(
-          color: Palette.brushGreen,
-          fontSize: 10,
-          fontWeight: FontWeight.w400,
-        ),
-      ));
+    alignment: Alignment.centerLeft,
+    child: Text(
+      'Login',
+      style: TextStyles.rubik(
+        color: Palette.brushGreen,
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+      ),
+    )
+  );
 }
 
 Widget _usernameField() {
@@ -154,27 +155,27 @@ Widget _buildLoginButton() {
     child: BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return (state.formStatus == LoginFormStatus.loading)
-            ? CircularProgressIndicator()
+            ? CustomProgressIndicator()
             : ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Palette.loginButtonColor),
-                  minimumSize: MaterialStatePropertyAll(Size(double.infinity, 40)),
-                  shape: MaterialStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // Установите радиус здесь
-                    ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Palette.loginButtonColor),
+                minimumSize: MaterialStatePropertyAll(Size(double.infinity, 40)),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Установите радиус здесь
                   ),
                 ),
-                onPressed: () => context.read<LoginBloc>().add(LoginSubmittedEvent()),
-                child: Text(
-                  'Login'.toUpperCase(),
-                  style: TextStyles.rubik(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+              ),
+              onPressed: () => context.read<LoginBloc>().add(LoginSubmittedEvent()),
+              child: Text(
+                'Login'.toUpperCase(),
+                style: TextStyles.rubik(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
-              );
+              ),
+            );
       },
     ),
   );

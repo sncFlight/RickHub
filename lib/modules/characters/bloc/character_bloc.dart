@@ -26,7 +26,9 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
       )
     );
 
-    state.loadedCharacters.clear();
+    if (state.loadedCharacters.isNotEmpty) {
+      state.loadedCharacters.clear();
+    }
 
     await refreshData(
       event: event,
