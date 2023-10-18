@@ -47,7 +47,7 @@ class CharactersScreen extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-              color: Colors.white
+            color: Colors.white
           )
         ),
         child: SvgPicture.asset(

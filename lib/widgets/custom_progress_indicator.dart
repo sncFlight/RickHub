@@ -9,7 +9,7 @@ class CustomProgressIndicator extends StatefulWidget {
 
   const CustomProgressIndicator({
     Key? key,
-    this.size = 50.0
+    this.size = 200.0
   }) : super(key: key);
 
   @override
@@ -32,9 +32,7 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator> with 
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          AudioPlayer().play(UrlSource(SoundPaths.rickBelch));
-        },
+        onTap: () => AudioPlayer().play(AssetSource(SoundPaths.rickBelch)),
         child: RotationTransition(
           turns: _controller,
           child: Image.asset(
