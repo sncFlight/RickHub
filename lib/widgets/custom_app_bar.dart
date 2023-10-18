@@ -14,6 +14,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   PreferredSizeWidget build(BuildContext context) {
     return AppBar(
       backgroundColor: Palette.appBarGreen,
+      leading: IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: Icon(Icons.arrow_back_ios),
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(18)),
       ),
@@ -22,29 +26,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios),
-              ),
-              Text('Enter PIN-code'),
+              Text(title),
             ],
           ),
           widget,
-          // Container(
-          //   width: 30,
-          //   height: 30,
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.circle,
-          //     border: Border.all(
-          //         color: Colors.white
-          //     )
-          //   ),
-          //   child: SvgPicture.asset(
-          //     ImagePaths.heart,
-          //     width: 24,
-          //     height: 24,
-          //   ),
-          // ),
         ],
       ),
       // automaticallyImplyLeading: true,

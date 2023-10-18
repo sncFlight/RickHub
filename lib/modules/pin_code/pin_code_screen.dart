@@ -17,9 +17,10 @@ class PinCodeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: BlocProvider(
-        create: (context) => PinCodeBloc(
-          repository: PinCodeRepository(),
-        ),
+        create: (context) =>
+            PinCodeBloc(
+              repository: PinCodeRepository(),
+            ),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -55,14 +56,14 @@ class PinCodeScreen extends StatelessWidget {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            for (int i = 0; i < 4; i++)
-              Padding(
-                padding: EdgeInsets.only(left: (i > 0) ? 16 : 0),
-                child: _buildShape((i < (state.pinCode.length)
-                  ? Colors.green
-                  : Colors.grey
-                )),
-              ),
+              for (int i = 0; i < 4; i++)
+                Padding(
+                  padding: EdgeInsets.only(left: (i > 0) ? 16 : 0),
+                  child: _buildShape((i < (state.pinCode.length)
+                      ? Colors.green
+                      : Colors.grey
+                  )),
+                ),
             ],
           );
         },
@@ -84,70 +85,89 @@ class PinCodeScreen extends StatelessWidget {
   Widget _buildNumPud() {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          for (var i = 0; i < 4; i++)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: i < 3
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (int j = 1; j < 4; j++)
-                        _buildNumButton((3 * i) + j),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: null,
-                        child: SizedBox()
-                      ),
-                      _buildNumButton(0),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Icon(
-                          Icons.backspace,
-                          color: Colors.black,
-                          size: 24,
+      child: BlocListener<PinCodeBloc, PinCodeState>(
+        listener: (context, state) {
+          if (state.status == PinCodeStatus.successEnter) {
+            // context.read<PinCodeBloc>().add(RouteChangedEvent());
+            Navigator.pushNamed(context, RouteConstants.charactersRoute);
+          }
+        },
+        child: BlocBuilder<PinCodeBloc, PinCodeState>(
+          builder: (context, state) {
+            // if (state.status == PinCodeStatus.successEnter) {
+            //   // context.read<PinCodeBloc>().add(RouteChangedEvent());
+            //   Navigator.pushNamed(context, RouteConstants.charactersRoute);
+            // }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                for (var i = 0; i < 4; i++)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: i < 3
+                        ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        for (int j = 1; j < 4; j++)
+                          _buildNumButton(
+                            number: ((3 * i) + j),
+                            context: context,
+                            state: state,
+                          ),
+                      ],
+                    )
+                        : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: null,
+                            child: SizedBox()
                         ),
-                      ),
-                    ],
+                        _buildNumButton(
+                          number: 0,
+                          context: context,
+                          state: state,
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Icon(
+                            Icons.backspace,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-            ),
-        ],
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildNumButton(int number) {
-    return BlocBuilder<PinCodeBloc, PinCodeState>(
-        builder: (context, state) {
-          if (state.status == PinCodeStatus.successEnter) {
-            context.read<PinCodeBloc>().add(RouteChangedEvent());
-
-            Navigator.pushNamed(context, RouteConstants.charactersRoute);
-          }
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: TextButton(
-              onPressed: () => context.read<PinCodeBloc>().add(
+  Widget _buildNumButton({
+    required int number,
+    required BuildContext context,
+    required PinCodeState state,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TextButton(
+        onPressed: () =>
+            context.read<PinCodeBloc>().add(
                 PinCodeChangedEvent(pinCode: state.pinCode + number.toString())
-              ),
-              child: Text(
-                number.toString(),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
             ),
-          );
-      }
+        child: Text(
+          number.toString(),
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ),
     );
   }
 }

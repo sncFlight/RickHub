@@ -6,4 +6,5 @@ class Palette {
   static Color get profileGreen => Color(0xFFA1DD16);
   static Color get brushGreen => Color(0xFF298E3E);
   static Color get searchDecorationGreen => Color(0xFF298E3E);
+  static Color get loginButtonColor => Color(0xFF61AF31);
 }

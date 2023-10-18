@@ -9,6 +9,7 @@ import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/modules/characters/services/character_repository.dart';
 import 'package:rick_hub/widgets/character_widget.dart';
 import 'package:rick_hub/widgets/custom_app_bar.dart';
+import 'package:rick_hub/widgets/logo_widget.dart';
 import 'package:rick_hub/widgets/search_input.dart';
 
 class CharactersScreen extends StatelessWidget {
@@ -42,20 +43,20 @@ class CharactersScreen extends StatelessWidget {
     return CustomAppBar(
       title: 'Characters',
       widget: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: Colors.white
-                )
-            ),
-            child: SvgPicture.asset(
-              ImagePaths.user,
-              width: 24,
-              height: 24,
-            ),
-          ),
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+                color: Colors.white
+            )
+        ),
+        child: SvgPicture.asset(
+          ImagePaths.user,
+          width: 24,
+          height: 24,
+        ),
+      ),
     );
   }
 
@@ -93,6 +94,7 @@ class CharactersScreen extends StatelessWidget {
             width: 24,
             height: 24,
           ),
+          LogoWidget(),
           SvgPicture.asset(
             ImagePaths.bigStar,
             width: 24,

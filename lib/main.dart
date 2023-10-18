@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
         RouteConstants.pinCodeRoute: (context) => PinCodeScreen(),
         RouteConstants.charactersRoute: (context) => CharactersScreen(),
       },
-      home: LoginScreen(),
+      home: CharactersScreen(),
+      initialRoute: RouteConstants.loginRoute,
+    //  initialRoute: RouteConstants.charactersRoute,
     );
   }
 }
