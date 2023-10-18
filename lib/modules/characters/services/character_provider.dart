@@ -7,7 +7,7 @@ class CharactersProvider {
   static final Dio _dio = Dio();
 
   Future<List<Character>> getAll(Filter filter) async {
-    final String url = 'https://rickandmortyapi.com/api/character/?name=${filter.name}&page=${filter.page}';
+    final String url = 'https://rickandmortyapi.com/api/character?name=${filter.name}&page=${filter.page}';
 
     try {
       List<Map<String, dynamic>> rawCharacters = [];

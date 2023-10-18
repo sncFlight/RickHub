@@ -26,6 +26,8 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
       )
     );
 
+    state.loadedCharacters.clear();
+
     await refreshData(
       event: event,
       emit: emit
@@ -70,11 +72,10 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   }) async {
     try {
       final List<Character> loadedCharactersList = await charactersRepository!.getAllCharacters(state.filter);
-      state.loadedCharacters.addAll(loadedCharactersList);
 
       emit(
         state.copyWith(
-          loadedCharacters: state.loadedCharacters,
+          loadedCharacters: state.loadedCharacters + loadedCharactersList,
           formStatus: CharactersStatus.loaded,
           filter: Filter(
             page: state.filter.page,

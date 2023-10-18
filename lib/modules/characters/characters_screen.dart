@@ -136,8 +136,14 @@ class CharactersScreen extends StatelessWidget {
               itemCount: state.loadedCharacters.length + 1,
               padding: EdgeInsets.symmetric(horizontal: 16),
               itemBuilder: (BuildContext context, int index) {
-                if (index == state.loadedCharacters.length) {
-                  return CircularProgressIndicator();
+                if (
+                  index == state.loadedCharacters.length
+                ) {
+                  if (state.loadedCharacters.length != 0) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return SizedBox.shrink();
+                  }
                 }
 
                 return Padding(

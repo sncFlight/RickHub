@@ -14,6 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext c) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocProvider(
         create: (context) => LoginBloc(repository: LocalLoginRepository()),
         child: SafeArea(

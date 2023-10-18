@@ -12,5 +12,5 @@ class ImagePaths {
 
   // image block
   static String portal = 'assets/images/portal.png';
-  static String loginBackground = 'assets/images/log-in.png';
+  static String loginBackground = 'assets/images/ricks.png';
 }

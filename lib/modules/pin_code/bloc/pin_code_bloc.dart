@@ -28,6 +28,7 @@ class PinCodeBloc extends Bloc<PinCodeEvent, PinCodeState> {
     }
 
     if (isSaved) {
+
       if (await validatePinCode(event.pinCode)) {
         emit(state.copyWith(pinCode: event.pinCode, status: PinCodeStatus.successEnter));
       } else {
