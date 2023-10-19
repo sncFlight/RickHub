@@ -2,7 +2,6 @@ import 'package:rick_hub/modules/characters/filters/filter.dart';
 import 'package:dio/dio.dart';
 import 'package:rick_hub/modules/characters/models/character.dart';
 
-
 class CharactersProvider {
   static final Dio _dio = Dio();
 

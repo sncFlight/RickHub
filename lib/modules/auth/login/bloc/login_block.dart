@@ -15,30 +15,42 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onLoginUsernameChangedEventCallback(LoginUsernameChangedEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(username: event.username));
+    emit(state.copyWith(
+      username: event.username,
+      formStatus: LoginFormStatus.initial
+    ));
   }
 
   Future<void> _onLoginPasswordChangedEventCallback(LoginPasswordChangedEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(password: event.password));
+    emit(state.copyWith(
+      password: event.password,
+      formStatus: LoginFormStatus.initial
+    ));
   }
 
   Future<void> _onLoginSubmittedEventCallback(LoginSubmittedEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(formStatus: LoginFormStatus.loading));
+    if (
+      state.username.isEmpty
+      || state.password.isEmpty
+    ) {
+      emit(state.copyWith(formStatus: LoginFormStatus.emptyAuthData));
+    } else {
+      try {
+        emit(state.copyWith(formStatus: LoginFormStatus.loading));
 
-    try {
-      final bool isSuccess = await repository?.login(
-        userName: state.username,
-        password: state.password,
-      ) ?? false;
+        final bool? isSuccess = await repository?.login(
+          userName: state.username,
+          password: state.password,
+        );
 
-      if (isSuccess) {
-        emit(state.copyWith(formStatus: LoginFormStatus.authorized));
-      } else {
-        emit(state.copyWith(formStatus: LoginFormStatus.initial));
+        if (isSuccess ?? false) {
+          emit(state.copyWith(formStatus: LoginFormStatus.authorized));
+        } else {
+          emit(state.copyWith(formStatus: LoginFormStatus.wrongAuthData));
+        }
+      } catch (e) {
+        emit(state.copyWith(formStatus: LoginFormStatus.error));
       }
-
-    } catch(e) {
-      emit(state.copyWith(formStatus: LoginFormStatus.error));
     }
   }
 }

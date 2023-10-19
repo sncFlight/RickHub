@@ -5,7 +5,6 @@ import 'package:rick_hub/constants/image_paths.dart';
 import 'package:rick_hub/constants/route_constants.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_bloc.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_state.dart';
-import 'package:rick_hub/modules/pin_code/repositories/pin_code_repository.dart';
 import 'package:rick_hub/widgets/custom_app_bar.dart';
 
 import 'bloc/pin_code_event.dart';
@@ -18,9 +17,7 @@ class PinCodeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: BlocProvider(
-        create: (context) => PinCodeBloc(
-          repository: PinCodeRepository(),
-        ),
+        create: (context) => PinCodeBloc(),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),

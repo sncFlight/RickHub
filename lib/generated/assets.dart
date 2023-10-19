@@ -2,13 +2,20 @@
 class Assets {
   Assets._();
 
-  static const String imagesArrow = 'assets/images/arrow.svg';
-  static const String imagesBigStar = 'assets/images/big_star.svg';
-  static const String imagesHeart = 'assets/images/heart.svg';
-  static const String imagesLittleStar = 'assets/images/little_star.svg';
-  static const String imagesLocation = 'assets/images/location.svg';
-  static const String imagesLogo = 'assets/images/logo.svg';
-  static const String imagesSearch = 'assets/images/search.svg';
-  static const String imagesUser = 'assets/images/user.svg';
+  static const String iconsArrow = 'assets/icons/arrow.svg';
+  static const String iconsBigStar = 'assets/icons/big_star.svg';
+  static const String iconsHeart = 'assets/icons/heart.svg';
+  static const String iconsLittleStar = 'assets/icons/little_star.svg';
+  static const String iconsLocation = 'assets/icons/location.svg';
+  static const String iconsLogo = 'assets/icons/logo.svg';
+  static const String iconsPortal = 'assets/icons/portal.svg';
+  static const String iconsSearch = 'assets/icons/search.svg';
+  static const String iconsUser = 'assets/icons/user.svg';
+  static const String imagesLogIn = 'assets/images/log-in.png';
+  static const String imagesPortal = 'assets/images/portal.png';
+  static const String imagesRickBelch = 'assets/images/rick_belch.png';
+  static const String imagesRicks = 'assets/images/ricks.png';
+  static const String imagesSadMorty = 'assets/images/sad_morty.png';
+  static const String soundsRickBelch = 'assets/sounds/rick_belch.mp3';
 
 }

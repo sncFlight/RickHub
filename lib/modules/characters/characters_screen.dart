@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rick_hub/constants/image_paths.dart';
+import 'package:rick_hub/constants/text_styles.dart';
 import 'package:rick_hub/modules/characters/bloc/character_bloc.dart';
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
 import 'package:rick_hub/modules/characters/bloc/character_state.dart';
@@ -113,13 +114,17 @@ class CharactersScreen extends StatelessWidget {
   Widget _buildCharacters() {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
-        if (
-          state.formStatus == CharactersStatus.empty
-          && state.loadedCharacters.isEmpty
-        ) {
+        if (state.formStatus == CharactersStatus.initial) {
           callRefresh(context);
           
           return SizedBox.shrink();
+        } else if (state.formStatus == CharactersStatus.loading) {
+          return CustomProgressIndicator();
+        } else if (
+          state.formStatus == CharactersStatus.empty
+          || state.formStatus == CharactersStatus.error
+        ) {
+          return _buildEmptyStatusText();
         }
 
         return NotificationListener<ScrollNotification>(
@@ -162,15 +167,38 @@ class CharactersScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildItem(Character character) {
+    return CharacterWidget(character: character);
+  }
+
+  Widget _buildEmptyStatusText() {
+    return Center(
+      child: Row(
+        children: [
+          Text(
+            'Нет данных'.toUpperCase(),
+            style: TextStyles.rubik(
+              color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Image.asset(
+              ImagePaths.rickBelch,
+              width: 200,
+              height: 200,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> callLoadMore(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersLoadedMoreEvent());
   }
 
   Future<void> callRefresh(BuildContext context) async {
     context.read<CharactersBloc>().add(CharactersPulledToRefreshEvent());
-  }
-
-  Widget _buildItem(Character character) {
-    return CharacterWidget(character: character);
   }
 }

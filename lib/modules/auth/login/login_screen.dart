@@ -36,8 +36,14 @@ class LoginScreen extends StatelessWidget {
                   listener: (context, state) {
                     final LoginFormStatus formStatus = state.formStatus;
 
-                    if (formStatus == LoginFormStatus.error) {
-                      _showSnackBar(context, 'Ошибка');
+                    if (formStatus == LoginFormStatus.emptyAuthData) {
+                      _showAlertDialog(
+                        context: context, message: 'Введите логин и пароль'
+                      );
+                    } else if (formStatus == LoginFormStatus.wrongAuthData) {
+                      _showAlertDialog(
+                        context: context, message: 'Неправильный логин или пароль'
+                      );
                     }
                   },
                   child: Padding(
@@ -69,128 +75,139 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget _buildLogo() {
-  return Container(
-    height: 145,
-    child: Stack(
-      children: [
-        Center(child: Image.asset(ImagePaths.portal, fit: BoxFit.fill)),
-        Center(child: LogoWidget()),
-      ],
-    ),
-  );
-}
-
-Widget _buildFieldsInfoText() {
-  return Align(
-    alignment: Alignment.centerLeft,
-    child: Text(
-      'Login',
-      style: TextStyles.rubik(
-        color: Palette.brushGreen,
-        fontSize: 10,
-        fontWeight: FontWeight.w400,
+  Widget _buildLogo() {
+    return Container(
+      height: 145,
+      child: Stack(
+        children: [
+          Center(child: Image.asset(ImagePaths.portal, fit: BoxFit.fill)),
+          Center(child: LogoWidget()),
+        ],
       ),
-    )
-  );
-}
+    );
+  }
 
-Widget _usernameField() {
-  return BlocBuilder<LoginBloc, LoginState>(
-    builder: (context, state) {
-      return TextFormField(
-        decoration: InputDecoration(
-          hintText: 'Login',
-          focusedBorder: UnderlineInputBorder (
-            borderSide: BorderSide(color: Palette.brushGreen), // Установите цвет здесь
-          ),
-          hintStyle: TextStyles.rubik(
-            color: Colors.black,
+  Widget _buildFieldsInfoText() {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Login',
+          style: TextStyles.rubik(
+            color: Palette.brushGreen,
             fontSize: 10,
             fontWeight: FontWeight.w400,
           ),
-        ),
-        onChanged: (value) => context.read<LoginBloc>().add(LoginUsernameChangedEvent(username: value)),
-      );
-    },
-  );
-}
+        )
+    );
+  }
 
-Widget _buildPasswordField() {
-  return BlocBuilder<LoginBloc, LoginState>(
-    builder: (context, state) {
-      return TextFormField(
-        obscureText: true,
-        decoration: InputDecoration(
-          focusedBorder: UnderlineInputBorder (
-            borderSide: BorderSide(color: Palette.brushGreen), // Установите цвет здесь
-          ),
-          hintText: 'Password',
-          hintStyle: TextStyles.rubik(
-            color: Colors.black,
-            fontSize: 10,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChangedEvent(password: value)),
-      );
-    },
-  );
-}
-
-Widget _buildLoginButton() {
-  return BlocListener<LoginBloc, LoginState>(
-    listener: (context, state) {
-      final LoginFormStatus formStatus = state.formStatus;
-      bool pinCodeOpened = false;
-
-      if (formStatus == LoginFormStatus.authorized && !pinCodeOpened) {
-        pinCodeOpened = true;
-
-        Navigator.pushNamed(context, RouteConstants.pinCodeRoute);
-      }
-    },
-    child: BlocBuilder<LoginBloc, LoginState>(
+  Widget _usernameField() {
+    return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return (state.formStatus == LoginFormStatus.loading)
-            ? CustomProgressIndicator()
-            : ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Palette.loginButtonColor),
-                minimumSize: MaterialStatePropertyAll(Size(double.infinity, 40)),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0), // Установите радиус здесь
-                  ),
+        return TextFormField(
+          decoration: InputDecoration(
+            hintText: 'Login',
+            focusedBorder: UnderlineInputBorder (
+              borderSide: BorderSide(color: Palette.brushGreen), // Установите цвет здесь
+            ),
+            hintStyle: TextStyles.rubik(
+              color: Colors.black,
+              fontSize: 10,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          onChanged: (value) => context.read<LoginBloc>().add(LoginUsernameChangedEvent(username: value)),
+        );
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          obscureText: true,
+          decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder (
+              borderSide: BorderSide(color: Palette.brushGreen), // Установите цвет здесь
+            ),
+            hintText: 'Password',
+            hintStyle: TextStyles.rubik(
+              color: Colors.black,
+              fontSize: 10,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChangedEvent(password: value)),
+        );
+      },
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        final LoginFormStatus formStatus = state.formStatus;
+        bool pinCodeOpened = false;
+
+        if (formStatus == LoginFormStatus.authorized && !pinCodeOpened) {
+          pinCodeOpened = true;
+
+          Navigator.pushNamed(context, RouteConstants.pinCodeRoute);
+        }
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          return (state.formStatus == LoginFormStatus.loading)
+              ? CustomProgressIndicator()
+              : ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Palette.loginButtonColor),
+              minimumSize: MaterialStatePropertyAll(Size(double.infinity, 40)),
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // Установите радиус здесь
                 ),
               ),
-              onPressed: () => context.read<LoginBloc>().add(LoginSubmittedEvent()),
-              child: Text(
-                'Login'.toUpperCase(),
-                style: TextStyles.rubik(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
+            ),
+            onPressed: () => context.read<LoginBloc>().add(LoginSubmittedEvent()),
+            child: Text(
+              'Login'.toUpperCase(),
+              style: TextStyles.rubik(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
               ),
-            );
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showAlertDialog({
+    required BuildContext context,
+    required String message
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Ошибка'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Ок'),
+            ),
+          ],
+        );
       },
-    ),
-  );
+    );
+  }
 }
 
-void _showSnackBar(BuildContext context, String message) {
-  final snackBar = SnackBar(
-    content: Text(message),
-    action: SnackBarAction(
-      label: 'Закрыть',
-      onPressed: () {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      },
-    ),
-  );
 
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}

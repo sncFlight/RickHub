@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
 import 'package:rick_hub/modules/characters/bloc/character_state.dart';
@@ -7,6 +9,7 @@ import 'package:rick_hub/modules/characters/services/character_repository.dart';
 
 class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   final CharactersRepository? charactersRepository;
+  bool canSearch = true;
 
   CharactersBloc({
     this.charactersRepository,
@@ -17,18 +20,17 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   }
 
   Future<void> _onCharactersSearchChangedEvent(CharactersSearchChangedEvent event, Emitter emit) async {
-    emit(
-      state.copyWith(
-        formStatus: CharactersStatus.loading,
-        filter: Filter(
-          name: event.searchString,
-        ),
-      )
-    );
-
     if (state.loadedCharacters.isNotEmpty) {
       state.loadedCharacters.clear();
     }
+
+    emit(
+      state.copyWith(
+        formStatus: CharactersStatus.loading,
+        filter: Filter(name: event.searchString),
+      )
+    );
+
 
     await refreshData(
       event: event,
@@ -55,6 +57,10 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
   }
 
   Future<void> _onPulledToRefreshEventCallback(CharactersPulledToRefreshEvent event, Emitter emit) async {
+    if (state.loadedCharacters.isNotEmpty) {
+      state.loadedCharacters.clear();
+    }
+
     emit(
       state.copyWith(
         formStatus: CharactersStatus.loading,
@@ -75,10 +81,14 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState>{
     try {
       final List<Character> loadedCharactersList = await charactersRepository!.getAllCharacters(state.filter);
 
+      final CharactersStatus status = loadedCharactersList.isEmpty
+        ? CharactersStatus.empty
+        : CharactersStatus.loaded;
+
       emit(
         state.copyWith(
           loadedCharacters: state.loadedCharacters + loadedCharactersList,
-          formStatus: CharactersStatus.loaded,
+          formStatus: status,
           filter: Filter(
             page: state.filter.page,
             name: state.filter.name,

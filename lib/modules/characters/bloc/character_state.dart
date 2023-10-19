@@ -7,7 +7,7 @@ class CharactersState {
 
   CharactersState({
     this.loadedCharacters = const [],
-    this.formStatus = CharactersStatus.empty,
+    this.formStatus = CharactersStatus.initial,
     this.filter = const Filter(),
   });
 
@@ -25,8 +25,9 @@ class CharactersState {
 }
 
 enum CharactersStatus {
-  empty,
+  initial,
   loading,
   loaded,
+  empty,
   error,
 }

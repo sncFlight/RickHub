@@ -2,14 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_event.dart';
 import 'package:rick_hub/modules/pin_code/bloc/pin_code_state.dart';
-import 'package:rick_hub/modules/pin_code/repositories/pin_code_repository.dart';
 
 class PinCodeBloc extends Bloc<PinCodeEvent, PinCodeState> {
-  final PinCodeRepository? repository;
   
-  PinCodeBloc({
-    this.repository,
-  }) : super(PinCodeState()) {
+  PinCodeBloc() : super(PinCodeState()) {
     on<PinCodeChangedEvent>(_onPinCodeChanged);
     on<RouteChangedEvent>(_onRouteChanged);
   }

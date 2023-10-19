@@ -24,7 +24,9 @@ class LoginState {
 
 enum LoginFormStatus {
   initial,
-  loading,
-  error,
   authorized,
+  emptyAuthData,
+  wrongAuthData,
+  error,
+  loading,
 }
