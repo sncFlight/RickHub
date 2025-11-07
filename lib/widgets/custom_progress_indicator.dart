@@ -1,6 +1,8 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:audioplayers/audioplayers.dart';
+
 import 'package:rick_hub/constants/image_paths.dart';
 import 'package:rick_hub/constants/sound_paths.dart';
 

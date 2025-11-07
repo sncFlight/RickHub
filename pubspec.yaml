@@ -13,17 +13,16 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.3
   uuid: ^3.0.0
-  audioplayers: 5.2.0
-  shared_preferences: 2.2.2
-  flutter_svg: 2.0.7
-  google_fonts: 6.1.0
-  dio: 5.3.3
+  audioplayers: ^6.5.1
+  shared_preferences: ^2.2.2
+  flutter_svg: ^2.0.7
+  google_fonts: ^6.1.0
+  dio: ^5.3.3
+  win32: ^5.15.0
 
 dev_dependencies:
-  bloc_test: ^9.1.0
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.0
 
 flutter:
   uses-material-design: true
