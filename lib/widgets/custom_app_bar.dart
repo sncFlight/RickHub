@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rick_hub/constants/palette.dart';
-import 'package:rick_hub/constants/text_styles.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             title,
-            style: TextStyles.rubik(
+            style: GoogleFonts.rubik(
               color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.w400,

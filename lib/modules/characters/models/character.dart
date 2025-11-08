@@ -6,7 +6,6 @@ class Character {
   final String originName;
   final String locationName;
   final String imageUrl;
-  final String url;
   final String species;
 
   Character({
@@ -17,7 +16,6 @@ class Character {
     required this.originName,
     required this.locationName,
     required this.imageUrl,
-    required this.url,
     required this.species,
   });
 
@@ -30,7 +28,6 @@ class Character {
       originName: json["origin"]["name"],
       locationName: json["location"]["name"],
       imageUrl: json["image"],
-      url: json["url"],
       species: json["species"],
     );
   }

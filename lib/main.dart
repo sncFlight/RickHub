@@ -1,42 +1,31 @@
 import 'package:flutter/material.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:rick_hub/constants/route_constants.dart';
-import 'package:rick_hub/modules/characters/characters_screen.dart';
+import 'package:rick_hub/modules/favorites/bloc/favorites_bloc.dart';
+import 'package:rick_hub/modules/favorites/bloc/favorites_event.dart';
+import 'package:rick_hub/modules/favorites/models/favorite_character.dart';
+import 'package:rick_hub/navigation/main_navigation.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(FavoriteCharacterAdapter());
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _checkPinCode(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          bool hasPinCode = snapshot.data ?? false;
-
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            routes: {
-              RouteConstants.charactersRoute: (context) => CharactersScreen(),
-            },
-            initialRoute: hasPinCode
-                ? RouteConstants.pinCodeRoute
-                : RouteConstants.loginRoute,
-          );
-        } else {
-          // Show a loading indicator or some placeholder while checking pin code
-          return CircularProgressIndicator();
-        }
-      },
+    return BlocProvider(
+      create: (context) => FavoritesBloc()..add(LoadFavoritesEvent()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MainNavigation(),
+      ),
     );
-  }
-
-  Future<bool> _checkPinCode() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey('pin_code');
   }
 }

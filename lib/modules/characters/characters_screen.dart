@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:rick_hub/constants/image_paths.dart';
-import 'package:rick_hub/constants/text_styles.dart';
 import 'package:rick_hub/modules/characters/bloc/character_bloc.dart';
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
 import 'package:rick_hub/modules/characters/bloc/character_state.dart';
@@ -18,7 +20,8 @@ class CharactersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CharactersBloc>(
-      create: (context) => CharactersBloc(charactersRepository: CharactersRepository()),
+      create: (context) =>
+          CharactersBloc(charactersRepository: CharactersRepository()),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildAppBar(),
@@ -45,17 +48,6 @@ class CharactersScreen extends StatelessWidget {
       widget: Container(
         width: 30,
         height: 30,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white
-          )
-        ),
-        child: SvgPicture.asset(
-          ImagePaths.user,
-          width: 24,
-          height: 24,
-        ),
       ),
     );
   }
@@ -66,7 +58,9 @@ class CharactersScreen extends StatelessWidget {
       child: BlocBuilder<CharactersBloc, CharactersState>(
         builder: (context, state) {
           return SearchInput(
-            onChanged: (value) => context.read<CharactersBloc>().add(CharactersSearchChangedEvent(searchString: value)),
+            onChanged: (value) => context
+                .read<CharactersBloc>()
+                .add(CharactersSearchChangedEvent(searchString: value)),
           );
         },
       ),
@@ -110,29 +104,24 @@ class CharactersScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildCharacters() {
     return BlocBuilder<CharactersBloc, CharactersState>(
       builder: (context, state) {
         if (state.formStatus == CharactersStatus.initial) {
           callRefresh(context);
-          
+
           return SizedBox.shrink();
         } else if (state.formStatus == CharactersStatus.loading) {
           return CustomProgressIndicator();
-        } else if (
-          state.formStatus == CharactersStatus.empty
-          || state.formStatus == CharactersStatus.error
-        ) {
+        } else if (state.formStatus == CharactersStatus.empty ||
+            state.formStatus == CharactersStatus.error) {
           return _buildEmptyStatusText();
         }
 
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            if (
-              notification is ScrollEndNotification
-              && notification.metrics.extentAfter == 0
-            ) {
+            if (notification is ScrollEndNotification &&
+                notification.metrics.extentAfter == 0) {
               callLoadMore(context);
             }
 
@@ -156,7 +145,9 @@ class CharactersScreen extends StatelessWidget {
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.only(top: 20,),
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                  ),
                   child: _buildItem(state.loadedCharacters[index]),
                 );
               },
@@ -172,25 +163,20 @@ class CharactersScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyStatusText() {
-    return Center(
-      child: Row(
-        children: [
-          Text(
-            'Нет данных'.toUpperCase(),
-            style: TextStyles.rubik(
-              color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Image.asset(
-              ImagePaths.rickBelch,
-              width: 200,
-              height: 200,
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          ImagePaths.rickBelch,
+          width: 200,
+          height: 200,
+        ),
+        Text(
+          'No data',
+          style: GoogleFonts.rubik(
+              color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
+        ),
+      ],
     );
   }
 

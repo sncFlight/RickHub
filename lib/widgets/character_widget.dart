@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rick_hub/constants/image_paths.dart';
 import 'package:rick_hub/modules/characters/models/character.dart';
+import 'package:rick_hub/modules/favorites/bloc/favorites_bloc.dart';
+import 'package:rick_hub/modules/favorites/bloc/favorites_event.dart';
+import 'package:rick_hub/modules/favorites/bloc/favorites_state.dart';
+import 'package:rick_hub/modules/favorites/models/favorite_character.dart';
 import 'package:rick_hub/widgets/location_widget.dart';
 
 class CharacterWidget extends StatelessWidget {
@@ -19,6 +24,7 @@ class CharacterWidget extends StatelessWidget {
     final String locationName = character.locationName;
     final String imageUrl = character.imageUrl;
     final String species = character.species;
+    const double imageSideLength = 100;
 
     final Color statusColor;
 
@@ -31,7 +37,7 @@ class CharacterWidget extends StatelessWidget {
     }
 
     return Container(
-      height: 90,
+      height: imageSideLength,
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -48,20 +54,19 @@ class CharacterWidget extends StatelessWidget {
           )
         ],
       ),
-     // color: Colors.orange,
       child: Row(
         children: [
           Stack(
             children: [
               Container(
-                width: 90,
+                width: imageSideLength,
                 child: Image.network(imageUrl),
               ),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
                   height: 16,
-                  width: 90,
+                  width: imageSideLength,
                   color: statusColor,
                   child: Center(
                     child: Text(
@@ -79,57 +84,103 @@ class CharacterWidget extends StatelessWidget {
               )
             ],
           ),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  fullName,
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    species + ', ' + gender,
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Row(
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 1),
-                        child: SvgPicture.asset(ImagePaths.location),
+                      Expanded(
+                        child: Text(
+                          fullName,
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
                       ),
-                      LocationWidget(location: originName),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: SvgPicture.asset(ImagePaths.arrow),
+                      BlocBuilder<FavoritesBloc, FavoritesState>(
+                        builder: (context, state) {
+                          final isFavorite = context.read<FavoritesBloc>().isFavorite(character.id);
+                          
+                          return IconButton(
+                            icon: Icon(
+                              isFavorite ? Icons.star : Icons.star_border,
+                              color: isFavorite ? Colors.amber : Colors.grey,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              if (isFavorite) {
+                                context.read<FavoritesBloc>().add(
+                                  RemoveFromFavoritesEvent(characterId: character.id),
+                                );
+                              } else {
+                                final favoriteCharacter = FavoriteCharacter(
+                                  id: character.id,
+                                  name: character.name,
+                                  imageUrl: character.imageUrl,
+                                  status: character.status,
+                                  species: character.species,
+                                  gender: character.gender,
+                                  originName: character.originName,
+                                  locationName: character.locationName,
+                                );
+                                context.read<FavoritesBloc>().add(
+                                  AddToFavoritesEvent(character: favoriteCharacter),
+                                );
+                              }
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: BoxConstraints(),
+                          );
+                        },
                       ),
-                      LocationWidget(location: locationName),
                     ],
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      species + ', ' + gender,
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            child: SvgPicture.asset(ImagePaths.location),
+                          ),
+                          Expanded(child: LocationWidget(location: originName)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: SvgPicture.asset(ImagePaths.arrow),
+                          ),
+                          Expanded(child: LocationWidget(location: locationName)),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
       ),
     );
   }
-
 }
