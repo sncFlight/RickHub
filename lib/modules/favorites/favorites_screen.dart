@@ -45,7 +45,7 @@ class FavoritesScreen extends StatelessWidget {
           icon: Container(
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -103,7 +103,7 @@ class FavoritesScreen extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       decoration: BoxDecoration(
         color: isSelected
-            ? Color(0xFF11B0C8).withOpacity(0.1)
+            ? Color(0xFF11B0C8).withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),

@@ -182,8 +182,11 @@ class CharacterWidget extends StatelessWidget {
             duration: Duration(milliseconds: 200),
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color:
-                  isFavorite ? Color(0xFFFFF3E0) : Colors.grey.withOpacity(0.1),
+              color: isFavorite
+                  ? Color(0xFFFFF3E0)
+                  : Colors.grey.withValues(
+                      alpha: 0.1,
+                    ),
               shape: BoxShape.circle,
             ),
             child: Icon(
