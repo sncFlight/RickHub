@@ -30,29 +30,21 @@ Rick and Morty character explorer app built with Flutter and BLoC pattern.
 
 ### 1. Clone the repository
 
-\`\`\`bash
 git clone https://github.com/sncFlight/RickHub.git
 cd RickHub
-\`\`\`
 
 ### 2. Install dependencies
 
-\`\`\`bash
 flutter pub get
-\`\`\`
 
 ### 3. Generate required files
 
-\`\`\`bash
 dart run build_runner build --delete-conflicting-outputs
 flutter pub run spider build
-\`\`\`
 
 ### 4. Run the app
 
-\`\`\`bash
 flutter run
-\`\`\`
 
 ## 📦 Dependencies
 
