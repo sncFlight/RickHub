@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
 import 'package:rick_hub/modules/characters/bloc/characters_bloc.dart';
@@ -47,7 +46,7 @@ class CharactersScreen extends StatelessWidget {
           return Center(child: CustomProgressIndicator());
         } else if (state.formStatus == CharactersStatus.empty ||
             state.formStatus == CharactersStatus.error) {
-          return _buildEmptyStatusText();
+          return EmptyStateWidget(text: 'No Characters');
         }
 
         return NotificationListener<ScrollNotification>(
@@ -97,26 +96,6 @@ class CharactersScreen extends StatelessWidget {
 
   Widget _buildItem(Character character) {
     return CharacterWidget(character: character);
-  }
-
-  Widget _buildEmptyStatusText() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        EmptyStateWidget(
-          text: 'No Characters',
-        ),
-        SizedBox(height: 8),
-        Text(
-          'Pull down to refresh',
-          style: GoogleFonts.rubik(
-            color: Color(0xFF9E9E9E),
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
-    );
   }
 
   Future<void> callLoadMore(BuildContext context) async {
