@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rick_hub/constants/palette.dart';
 
 class LocationWidget extends StatelessWidget {
   final String location;
@@ -17,7 +17,6 @@ class LocationWidget extends StatelessWidget {
         vertical: 2,
       ),
       decoration: ShapeDecoration(
-        color: Palette.locationRect,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -27,7 +26,6 @@ class LocationWidget extends StatelessWidget {
         maxLines: 1,
         location,
         style: GoogleFonts.rubik(
-          color: Palette.darkBlue,
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),

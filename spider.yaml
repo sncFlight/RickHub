@@ -1,0 +1,6 @@
+no_comments: true
+
+groups:
+  - path: assets/images
+    class_name: Images
+    types: [ .png, .jpg, .jpeg, .webp, .webm, .bmp ]

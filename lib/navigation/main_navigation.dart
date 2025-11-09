@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:rick_hub/modules/characters/characters_screen.dart';
 import 'package:rick_hub/modules/favorites/favorites_screen.dart';
 

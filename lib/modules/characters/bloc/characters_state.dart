@@ -17,10 +17,9 @@ class CharactersState {
     Filter? filter,
   }) {
     return CharactersState(
-      loadedCharacters: loadedCharacters ?? this.loadedCharacters,
-      formStatus: formStatus ?? this.formStatus,
-      filter: filter ?? this.filter
-    );
+        loadedCharacters: loadedCharacters ?? this.loadedCharacters,
+        formStatus: formStatus ?? this.formStatus,
+        filter: filter ?? this.filter);
   }
 }
 

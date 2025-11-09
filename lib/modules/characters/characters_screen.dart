@@ -1,105 +1,38 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:rick_hub/constants/image_paths.dart';
-import 'package:rick_hub/modules/characters/bloc/character_bloc.dart';
 import 'package:rick_hub/modules/characters/bloc/character_event.dart';
-import 'package:rick_hub/modules/characters/bloc/character_state.dart';
+import 'package:rick_hub/modules/characters/bloc/characters_bloc.dart';
+import 'package:rick_hub/modules/characters/bloc/characters_state.dart';
 import 'package:rick_hub/modules/characters/models/character.dart';
 import 'package:rick_hub/modules/characters/services/character_repository.dart';
 import 'package:rick_hub/widgets/character_widget.dart';
 import 'package:rick_hub/widgets/custom_app_bar.dart';
 import 'package:rick_hub/widgets/custom_progress_indicator.dart';
-import 'package:rick_hub/widgets/logo_widget.dart';
-import 'package:rick_hub/widgets/search_input.dart';
+import 'package:rick_hub/widgets/empty_state_widget.dart';
 
 class CharactersScreen extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CharactersBloc>(
       create: (context) =>
           CharactersBloc(charactersRepository: CharactersRepository()),
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildAppBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+        appBar: CustomAppBar(title: 'Characters', widget: Container()),
+        body: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildSearch(),
-              _buildLogo(),
+              SizedBox(height: 8),
               Expanded(
                 child: _buildCharacters(),
-              )
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(
-      title: 'Characters',
-      widget: Container(
-        width: 30,
-        height: 30,
-      ),
-    );
-  }
-
-  Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 7),
-      child: BlocBuilder<CharactersBloc, CharactersState>(
-        builder: (context, state) {
-          return SearchInput(
-            onChanged: (value) => context
-                .read<CharactersBloc>()
-                .add(CharactersSearchChangedEvent(searchString: value)),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildLogo() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 19,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SvgPicture.asset(
-            ImagePaths.littleStar,
-            width: 16,
-            height: 16,
-          ),
-          SvgPicture.asset(
-            ImagePaths.bigStar,
-            width: 24,
-            height: 24,
-          ),
-          LogoWidget(),
-          SvgPicture.asset(
-            ImagePaths.bigStar,
-            width: 24,
-            height: 24,
-          ),
-          SvgPicture.asset(
-            ImagePaths.littleStar,
-            width: 16,
-            height: 16,
-          ),
-        ],
       ),
     );
   }
@@ -109,10 +42,9 @@ class CharactersScreen extends StatelessWidget {
       builder: (context, state) {
         if (state.formStatus == CharactersStatus.initial) {
           callRefresh(context);
-
           return SizedBox.shrink();
         } else if (state.formStatus == CharactersStatus.loading) {
-          return CustomProgressIndicator();
+          return Center(child: CustomProgressIndicator());
         } else if (state.formStatus == CharactersStatus.empty ||
             state.formStatus == CharactersStatus.error) {
           return _buildEmptyStatusText();
@@ -124,33 +56,38 @@ class CharactersScreen extends StatelessWidget {
                 notification.metrics.extentAfter == 0) {
               callLoadMore(context);
             }
-
             return false;
           },
           child: RefreshIndicator(
             onRefresh: () => callRefresh(context),
-            child: ListView.builder(
-              itemCount: state.loadedCharacters.length + 1,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              itemBuilder: (BuildContext context, int index) {
-                if (index == state.loadedCharacters.length) {
-                  if (state.loadedCharacters.length != 0) {
-                    return Container(
-                      width: 30,
-                      child: CustomProgressIndicator(),
-                    );
-                  } else {
+            child: Scrollbar(
+              controller: _scrollController,
+              thumbVisibility: false,
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: state.loadedCharacters.length + 1,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == state.loadedCharacters.length) {
+                    if (state.loadedCharacters.isNotEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: CustomProgressIndicator(size: 140),
+                        ),
+                      );
+                    }
+
                     return SizedBox.shrink();
                   }
-                }
 
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                  ),
-                  child: _buildItem(state.loadedCharacters[index]),
-                );
-              },
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _buildItem(state.loadedCharacters[index]),
+                  );
+                },
+              ),
             ),
           ),
         );
@@ -166,15 +103,17 @@ class CharactersScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          ImagePaths.rickBelch,
-          width: 200,
-          height: 200,
+        EmptyStateWidget(
+          text: 'No Characters',
         ),
+        SizedBox(height: 8),
         Text(
-          'No data',
+          'Pull down to refresh',
           style: GoogleFonts.rubik(
-              color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
+            color: Color(0xFF9E9E9E),
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );

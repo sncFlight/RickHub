@@ -8,14 +8,9 @@ environment:
 
 dependencies:
   bloc: ^8.1.2
-  equatable: ^2.0.3
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
-  uuid: ^3.0.0
-  audioplayers: ^6.5.1
-  shared_preferences: ^2.2.2
-  flutter_svg: ^2.0.7
   google_fonts: ^6.1.0
   dio: ^5.3.3
   win32: ^5.15.0
@@ -25,13 +20,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator: ^2.0.0
-  build_runner: ^2.4.6
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.13
+  spider: ^4.2.2
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/
     - assets/images/
-    - assets/sounds/
-
